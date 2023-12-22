@@ -27,8 +27,8 @@ mongoose.connection.on("disconnected", () => {
 
 //middlewares
 app.use(cors());
-app.use(cookieParser());
 app.use(express.json());
+// app.use(cookieParser());
 
 app.use("/api/auth", authRoute);
 app.use("/api/users", usersRoute);
@@ -47,7 +47,13 @@ app.use((err, req, res, next) => {
   });
 });
 
-app.listen(8800, () => {
+// app.listen(8800, () => {
+//   connect();
+//   console.log("Connected to backend.");
+// });
+const PORT = 8080;
+
+app.listen(PORT, () => {
   connect();
-  console.log("Connected to backend.");
+  console.log(`🎉 Server listening at http://localhost:${PORT}/ 🎉`);
 });
