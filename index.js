@@ -47,10 +47,6 @@ app.use((err, req, res, next) => {
   });
 });
 
-// app.listen(8800, () => {
-//   connect();
-//   console.log("Connected to backend.");
-// });
 const PORT = 8080;
 
 app.listen(PORT, () => {
