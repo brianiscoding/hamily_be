@@ -1,9 +1,9 @@
 import express from "express";
-import { login, register } from "../controllers/auth.js";
+import { verify } from "../utils/verify.js";
 
 const router = express.Router();
+router.get("/login", verify, (req, res) =>
+  res.status(200).json(res.locals.user)
+);
 
-router.post("/register", register)
-router.post("/login", login)
-
-export default router
+export default router;
