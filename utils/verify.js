@@ -2,8 +2,8 @@ import Student from "../models/Student.js";
 import axios from "axios";
 
 export const verify = (req, res, next) => {
-  const token = req.cookies.user_access_token;
-  if (!token) {
+  const access_token = req.headers.user_access_token;
+  if (!access_token) {
     res.status(400).send("no login");
     return;
   }
@@ -11,10 +11,10 @@ export const verify = (req, res, next) => {
   axios
     .get("https://www.googleapis.com/oauth2/v1/userinfo", {
       headers: {
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${access_token}`,
         Accept: "application/json",
       },
-      params: { access_token: token },
+      params: { access_token },
     })
     .then(async (data) => {
       if (data.data.hd !== "hamilton.edu") {
