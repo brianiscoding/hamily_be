@@ -26,6 +26,15 @@ export const verify = (req, res, next) => {
         email: data.data.email.split("@")[0],
       });
       if (user) {
+        if (!user.participating) {
+          await Student.updateOne(
+            { _id: user._id },
+            {
+              $set: { participating: true },
+            }
+          );
+        }
+
         res.locals.user = user;
         next();
       } else res.status(400).send("invalid email");

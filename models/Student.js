@@ -6,6 +6,7 @@ const Student_Schema = new mongoose.Schema({
   school_id: String,
   year: Number,
   participating: Boolean,
+  bio: String,
 
   knows: Number,
   know_not: [String],

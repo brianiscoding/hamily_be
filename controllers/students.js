@@ -1,14 +1,19 @@
 import Student from "../models/Student.js";
 
-// const x = await Student.updateMany(
-//   {},
-//   { $set: { participating: false } },
-//   {
-//     upsert: false,
-//     multi: true,
-//   }
-// );
-// console.log(x);
+export const update_bio = async (req, res) => {
+  const bio = req.body.bio;
+  if (bio.length > 100) {
+    res.status(400).send("fail");
+    return;
+  }
+
+  try {
+    await Student.updateOne({ _id: res.locals.user._id }, { $set: { bio } });
+    res.status(200).json("success");
+  } catch (err) {
+    res.status(400).send("fail");
+  }
+};
 
 export const get_ranking = async (req, res) => {
   var year = ["senior", "junior", "sophomore", "freshman", "all"].indexOf(
@@ -44,8 +49,8 @@ export const get_ranking = async (req, res) => {
       year: x.year,
       knows: x.knows,
       known_bys: x.known_bys,
-      school_id: x.school_id,
-      split: [x.known_not_by.length, x.known_by.length, x.known_well_by.length],
+      bio: x.bio,
+      // split: [x.known_not_by.length, x.known_by.length, x.known_well_by.length],
     }));
 
     res.status(200).json(students);
@@ -97,7 +102,7 @@ export const get_students = async (req, res) => {
         known_by: 0,
         known_well_by: 0,
       }
-    ).sort({ known_bys: -1 });
+    ).sort({ knows: -1 });
 
     if (b) {
       students = students.map((x) => {
@@ -199,3 +204,29 @@ export const handle_vote = async (req, res) => {
     res.status(400).send("fail");
   }
 };
+
+// console.log("TEST");
+// const x = await Student.updateMany(
+//   {},
+//   {
+//     $set: {
+//       bio: "Hello Hamily!",
+//       knows: 0,
+//       know_not: [],
+//       know: [],
+//       know_well: [],
+
+//       known_bys: 0,
+//       known_not_by: [],
+//       known_by: [],
+//       known_well_by: [],
+//     },
+//   },
+//   {
+//     upsert: false,
+//     multi: true,
+//   }
+// );
+// console.log(x);
+// res.status(400).send("success");
+// return;
