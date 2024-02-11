@@ -102,7 +102,7 @@ export const get_students = async (req, res) => {
         known_by: 0,
         known_well_by: 0,
       }
-    ).sort({ knows: -1 });
+    ).sort({ known_bys: -1 });
 
     if (b) {
       students = students.map((x) => {
@@ -117,6 +117,7 @@ export const get_students = async (req, res) => {
             knows: x.knows,
             known_bys: x.known_bys,
             type,
+            bio: x.bio,
           };
         }
       });
@@ -158,7 +159,10 @@ export const handle_vote = async (req, res) => {
       if (i != -1) {
         // remove old
         tos.splice(i, 1);
-        await Student.updateOne({ _id: from._id }, { $set: { [type]: tos } });
+        await Student.updateOne(
+          { _id: from._id },
+          { $set: { [type]: tos }, $inc: { knows: -1 } }
+        );
       }
     }
     // to
@@ -185,6 +189,7 @@ export const handle_vote = async (req, res) => {
         $set: {
           [type]: [...from[type], to._id.toString()],
         },
+        $inc: { knows: 1 },
       }
     );
     // to
