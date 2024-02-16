@@ -22,9 +22,15 @@ export const verify = (req, res, next) => {
         return;
       }
 
-      const user = await Student.findOne({
-        email: data.data.email.split("@")[0],
-      });
+      const user = await Student.findOne(
+        {
+          email: data.data.email.split("@")[0],
+        },
+        {
+          school_id: 0,
+          participating: 0,
+        }
+      );
       if (user) {
         if (!user.participating) {
           await Student.updateOne(
